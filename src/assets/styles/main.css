@@ -1,0 +1,19 @@
+@font-face {
+  font-family: Avara;
+  src: url("../fonts/avara-bold.woff2");
+  font-weight: bold;
+}
+
+:root {
+  font-size: 6.25%;
+}
+
+body {
+  font-family: Avara;
+  font-size: 20rem;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}

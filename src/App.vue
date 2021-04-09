@@ -1,12 +1,11 @@
 <template>
   <div id="app">
-    <img src="" alt="" />
     <the-header></the-header>
   </div>
 </template>
 
 <script>
-import TheHeader from "./components/TheHeader";
+import TheHeader from "./components/home/TheHeader"
 
 export default {
   components: { TheHeader },
@@ -15,4 +14,6 @@ export default {
 
 <style>
 @import url("./assets/styles/reset.css");
+@import url("./assets/styles/variables.css");
+@import url("./assets/styles/main.css");
 </style>
