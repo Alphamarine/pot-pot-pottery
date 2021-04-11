@@ -1,3 +1,6 @@
 :root {
-  --gap: 40rem;
+  --color0: rgb(255, 255, 255);
+  --color1: rgb(20, 20, 20);
+
+  --gap: 20rem;
 }

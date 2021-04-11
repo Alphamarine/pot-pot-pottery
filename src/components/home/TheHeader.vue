@@ -1,11 +1,11 @@
 <template>
   <header id="header">
-    <prismic-image id="header__image" :field="document.image" />
+    <prismic-image id="header__image" :field="header.image" />
     <div id="header__text">
-      <prismic-rich-text id="header__text__title" :field="document.title" />
+      <prismic-rich-text id="header__text__title" :field="header.title" />
       <prismic-rich-text
         id="header__text__description"
-        :field="document.description"
+        :field="header.description"
       />
     </div>
   </header>
@@ -15,7 +15,7 @@
 export default {
   data() {
     return {
-      document: {
+      header: {
         title: [],
         description: [],
         image: {},
@@ -24,8 +24,8 @@ export default {
   },
   methods: {
     async getContent() {
-      const document = await this.$prismic.client.getSingle("home");
-      this.document = document.data;
+      const header = await this.$prismic.client.getSingle("home");
+      this.header = header.data;
     },
   },
   created() {
@@ -55,4 +55,5 @@ export default {
   font-size: 50rem;
   align-self: end;
 }
+
 </style>

@@ -1,14 +1,16 @@
 <template>
   <div id="app">
     <the-header></the-header>
+    <the-products></the-products>
   </div>
 </template>
 
 <script>
 import TheHeader from "./components/home/TheHeader"
+import TheProducts from "./components/home/TheProducts"
 
 export default {
-  components: { TheHeader },
+  components: { TheHeader, TheProducts },
 };
 </script>
 

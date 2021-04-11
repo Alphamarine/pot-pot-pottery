@@ -11,6 +11,7 @@
 body {
   font-family: Avara;
   font-size: 20rem;
+  color: rgb(var(--color1));
 }
 
 img {
