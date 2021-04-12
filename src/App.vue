@@ -3,9 +3,15 @@
     <the-header></the-header>
     <the-products
       :products="products"
-      @show-product="showProduct()"
+      @show-product="toggleProduct()"
     ></the-products>
-    <router-view></router-view>
+    <transition name="scroll">
+      <router-view
+        v-if="$route.name === 'Product'"
+        :productIsShown="productIsShown"
+        @hide-product="toggleProduct()"
+      ></router-view>
+    </transition>
   </div>
 </template>
 
@@ -31,8 +37,8 @@ export default {
       );
       this.products = products.results.reverse();
     },
-    showProduct() {
-      this.productIsShown = true;
+    toggleProduct() {
+      this.productIsShown = !this.productIsShown;
     },
   },
   created() {
@@ -45,4 +51,14 @@ export default {
 @import url("./assets/styles/reset.css");
 @import url("./assets/styles/variables.css");
 @import url("./assets/styles/main.css");
+
+.scroll-enter,
+.scroll-leave-to {
+  transform: translateY(100px);
+}
+
+.scroll-enter-active,
+.scroll-leave-active {
+  transition: all 0.5s;
+}
 </style>

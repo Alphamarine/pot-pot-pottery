@@ -11,7 +11,7 @@
           <prismic-rich-text
             class="products__item__text--title"
             :field="product.data.title"
-            @click="showProduct()"
+            @click="showProduct"
           />
         </router-link>
         <h4>{{ `€ ${$prismic.richTextAsPlain(product.data.price)},00` }}</h4>
@@ -25,10 +25,10 @@ export default {
   props: {
     products: Array,
   },
-  emits: ["showProduct"],
+  emits: ["show-product"],
   methods: {
     showProduct() {
-      this.$emit("showProduct");
+      this.$emit("show-product");
     },
   },
 };

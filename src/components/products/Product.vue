@@ -1,5 +1,5 @@
 <template>
-  <div v-if="productIsShown">
+  <div>
     <div v-if="typeof product.data === 'undefined'" />
     <div v-else id="product">
       <prismic-rich-text :field="product.data.title" id="product__title" />
@@ -8,7 +8,7 @@
         :alt="product.data.image.alt"
         id="product__image"
       />
-      <button id="product__close" @click="hideProduct">close</button>
+      <button id="product__close" @click="$router.push({ name: 'home'})">close</button>
       <h4 id="product__price">
         {{ `€ ${$prismic.richTextAsPlain(product.data.price)},00` }}
       </h4>
@@ -19,12 +19,12 @@
 <script>
 export default {
   props: {
-    uid: "",
+    uid: String,
   },
+  emits: ["hide-product"],
   data() {
     return {
       product: {},
-      productIsShown: true,
     };
   },
   methods: {
@@ -35,7 +35,8 @@ export default {
       this.product = product.results[0];
     },
     hideProduct() {
-      this.productIsShown = false;
+      // this.$emit("hide-product");
+      console.log("emitted");
     },
   },
   // methods: {
@@ -51,6 +52,7 @@ export default {
   // },
   created() {
     this.getContent(this.uid);
+    console.log("ok");
   },
   beforeRouteUpdate(to, from, next) {
     this.getContent(to.params.uid);
@@ -61,10 +63,13 @@ export default {
 
 <style>
 #product {
+  position: fixed;
+  top: 0;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   align-items: end;
   padding: var(--gap);
+  background-color: var(--color0);
 }
 
 #product__title {
