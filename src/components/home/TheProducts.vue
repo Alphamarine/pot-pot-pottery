@@ -7,10 +7,13 @@
       class="products__item"
     >
       <div class="products__item__text">
-        <prismic-rich-text
-          class="products__item__text--title"
-          :field="product.data.title"
-        />
+        <router-link :to="product.uid">
+          <prismic-rich-text
+            class="products__item__text--title"
+            :field="product.data.title"
+            @click="showProduct()"
+          />
+        </router-link>
         <h4>{{ `€ ${$prismic.richTextAsPlain(product.data.price)},00` }}</h4>
       </div>
     </div>
@@ -19,24 +22,14 @@
 
 <script>
 export default {
-  data() {
-    return {
-      products: [],
-    };
+  props: {
+    products: Array,
   },
+  emits: ["showProduct"],
   methods: {
-    async getContent() {
-      const products = await this.$prismic.client.query(
-        this.$prismic.Predicates.at("document.type", "product"),
-        {
-          orderings: "[document.last_publication_date]",
-        },
-      );
-      this.products = products.results.reverse();
+    showProduct() {
+      this.$emit("showProduct");
     },
-  },
-  created() {
-    this.getContent();
   },
 };
 </script>
@@ -76,7 +69,7 @@ export default {
 .products__item__text--title {
   font-size: 30rem;
   cursor: pointer;
-  transition: transform 0.4s ease;
+  transition: transform 0.3s ease;
   transform-origin: bottom left;
 }
 

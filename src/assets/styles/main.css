@@ -12,9 +12,14 @@ body {
   font-family: Avara;
   font-size: 20rem;
   color: rgb(var(--color1));
+  box-sizing: border-box;
 }
 
 img {
   width: 100%;
   height: 100%;
+}
+
+button {
+  cursor: pointer;
 }

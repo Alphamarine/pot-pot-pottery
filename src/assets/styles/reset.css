@@ -9,5 +9,21 @@ h3,
 h4,
 h5,
 h6 {
-  font-size: inherit;
+  font: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  color: inherit;
+  background: none;
+  border: none;
+  font: inherit;
+}
+
+button:focus {
+  outline: none;
 }
