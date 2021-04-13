@@ -76,4 +76,10 @@ export default {
 .products__item__text--title:hover {
   transform: scale(1.1);
 }
+
+@media screen and (max-width: 75em) {
+  #products {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

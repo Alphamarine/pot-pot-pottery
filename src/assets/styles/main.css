@@ -8,6 +8,12 @@
   font-size: 6.25%;
 }
 
+@media screen and (max-width: 50em) {
+  :root {
+    font-size: 5%;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

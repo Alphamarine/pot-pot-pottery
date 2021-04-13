@@ -8,7 +8,7 @@
       ></the-products>
       <the-footer :footer="home"></the-footer>
     </div>
-    <transition name="scroll">
+    <transition :name="productTransition">
       <router-view
         v-if="currentRoute === 'product' && products.length"
         :products="products"
@@ -37,6 +37,7 @@ export default {
       products: [],
       scrollY: 0,
       currentRoute: this.$route.name,
+      productTransition: "scroll",
     };
   },
   computed: {
@@ -53,7 +54,6 @@ export default {
     async getContent() {
       const home = await this.$prismic.client.getSingle("home");
       this.home = home.data;
-      console.log(this.home);
       const products = await this.$prismic.client.query(
         this.$prismic.Predicates.at("document.type", "product"),
         {
@@ -62,14 +62,21 @@ export default {
       );
       this.products = products.results.reverse();
     },
-    hideProduct() {
+    restoreHome() {
+      const home = document.querySelector("#home");
+      home.style.position = "relative";
+      home.style.top = 0;
+      window.scrollTo(0, this.scrollY, "smooth");
+    },
+    hideProduct(payload) {
+      const productContainer = document.querySelector("#product__container");
       this.$router.push({ name: "home" });
-      setTimeout(() => {
-        const home = document.querySelector("#home");
-        home.style.position = "relative";
-        home.style.top = 0;
-        window.scrollTo(0, this.scrollY, "smooth");
-      }, 500);
+      if (payload === "scrolling") {
+        productContainer.style.display = "none"
+        this.restoreHome();
+      } else {
+        setTimeout(this.restoreHome, 600);
+      }
     },
     showProduct() {
       const home = document.querySelector("#home");

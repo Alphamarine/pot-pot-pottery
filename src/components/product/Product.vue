@@ -1,12 +1,8 @@
 <template>
-  <div>
-    <div class="product">
+  <div id="product__container">
+    <div id="product">
       <prismic-rich-text :field="product.title" id="product__title" />
-      <img
-        :src="product.image.url"
-        :alt="product.image.alt"
-        id="product__image"
-      />
+      <prismic-image id="product__image" :field="product.image" />
       <button id="product__close" @click="hideProduct">close</button>
       <h4 id="product__price">
         {{ `€ ${$prismic.richTextAsPlain(product.price)},00` }}
@@ -22,18 +18,18 @@ export default {
     uid: String,
     products: Array,
   },
-  emits: ["hide-product"],
+  emits: ["close-product", "close-product-scrolling"],
   data() {
     return {
       product: {
         title: [],
+        price: [],
         image: {},
       },
     };
   },
   methods: {
     getProduct(uid) {
-      console.log(this.products[0]);
       const product = this.products.find((e) => e.uid === uid);
       this.product = product.data;
     },
@@ -44,7 +40,7 @@ export default {
       const pageHeight = document.body.offsetHeight;
       const scrollPosition = window.innerHeight + window.scrollY;
       if (Math.round(scrollPosition) >= pageHeight) {
-        this.hideProduct();
+        this.$emit("hide-product", "scrolling");
       }
     },
   },
@@ -67,7 +63,7 @@ export default {
 </script>
 
 <style>
-.product {
+#product {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
@@ -78,12 +74,16 @@ export default {
 }
 
 #product__title {
-  grid-row: 1 / 3;
+  z-index: 1;
+  grid-row: 1 / span 2;
+  grid-column: 1 / span 2;
   font-size: 30rem;
 }
 
 #product__image {
-  grid-row: 1 / 3;
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
 }
 
 #product__price {
