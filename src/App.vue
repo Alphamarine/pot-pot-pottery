@@ -1,10 +1,14 @@
 <template>
   <div id="app">
     <div id="home">
-      <the-header></the-header>
-      <the-products @show-product="showProduct"></the-products>
+      <the-header :header="home"></the-header>
+      <the-products
+        :products="products"
+        @show-product="showProduct"
+      ></the-products>
+      <the-footer :footer="home"></the-footer>
     </div>
-    <transition name="scroll" mode="out-in">
+    <transition name="scroll">
       <router-view
         v-if="currentRoute === 'product'"
         @hide-product="hideProduct"
@@ -16,38 +20,57 @@
 <script>
 import TheHeader from "./components/home/TheHeader";
 import TheProducts from "./components/home/TheProducts";
+import TheFooter from "./components/home/TheFooter";
 
 export default {
-  components: { TheHeader, TheProducts },
+  components: { TheHeader, TheProducts, TheFooter },
   data() {
     return {
+      home: {
+        title: [],
+        description: [],
+        image: {},
+        instagram: {},
+        facebook: {},
+      },
+      products: [],
       scrollY: 0,
       currentRoute: this.$route.name,
-      // productIsShown: false,
     };
-  },
-  watch: {
-    $route(to, from) {
-      this.currentRoute = to.name;
-    },
   },
   computed: {
     top() {
       return `-${this.scrollY}px`;
     },
   },
+  watch: {
+    $route(to, from) {
+      this.currentRoute = to.name;
+    },
+  },
   methods: {
+    async getContent() {
+      const home = await this.$prismic.client.getSingle("home");
+      this.home = home.data;
+      console.log(this.home);
+      const products = await this.$prismic.client.query(
+        this.$prismic.Predicates.at("document.type", "product"),
+        {
+          orderings: "[document.last_publication_date]",
+        },
+      );
+      this.products = products.results.reverse();
+    },
     hideProduct() {
+      this.$router.push({ name: "home" });
       setTimeout(() => {
-        // this.productIsShown = false;
         const home = document.querySelector("#home");
-        home.style.position = "";
-        home.style.top = "";
-        window.scrollTo(0, this.scrollY);
+        home.style.position = "relative";
+        home.style.top = 0;
+        window.scrollTo(0, this.scrollY, "smooth");
       }, 500);
     },
     showProduct() {
-      // this.productIsShown = true;
       const home = document.querySelector("#home");
       home.style.position = "fixed";
       home.style.top = this.top;
@@ -57,6 +80,9 @@ export default {
         this.scrollY = window.scrollY;
       }
     },
+  },
+  created() {
+    this.getContent();
   },
   mounted() {
     document.addEventListener("scroll", this.updateScroll);
@@ -76,6 +102,7 @@ export default {
 @import url("./assets/styles/main.css");
 
 #home {
+  position: relative;
   right: 0;
   left: 0;
 }

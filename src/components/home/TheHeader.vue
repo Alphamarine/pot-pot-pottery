@@ -13,23 +13,8 @@
 
 <script>
 export default {
-  data() {
-    return {
-      header: {
-        title: [],
-        description: [],
-        image: {},
-      },
-    };
-  },
-  methods: {
-    async getContent() {
-      const header = await this.$prismic.client.getSingle("home");
-      this.header = header.data;
-    },
-  },
-  created() {
-    this.getContent();
+  props: {
+    header: Object,
   },
 };
 </script>

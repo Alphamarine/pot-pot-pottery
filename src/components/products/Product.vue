@@ -1,16 +1,15 @@
 <template>
   <div>
-    <!-- <div v-if="typeof product.data === 'undefined'" class="product" /> -->
     <div class="product">
-      <prismic-rich-text :field="product.data.title" id="product__title" />
+      <prismic-rich-text :field="product.title" id="product__title" />
       <img
-        :src="product.data.image.url"
-        :alt="product.data.image.alt"
+        :src="product.image.url"
+        :alt="product.image.alt"
         id="product__image"
       />
       <button id="product__close" @click="hideProduct">close</button>
       <h4 id="product__price">
-        {{ `€ ${$prismic.richTextAsPlain(product.data.price)},00` }}
+        {{ `€ ${$prismic.richTextAsPlain(product.price)},00` }}
       </h4>
     </div>
     <div id="product__scrollable"></div>
@@ -26,13 +25,8 @@ export default {
   data() {
     return {
       product: {
-        data: {
-          title: [],
-          image: {
-            url: "",
-            alt: "",
-          },
-        },
+        title: [],
+        image: {},
       },
     };
   },
@@ -41,10 +35,9 @@ export default {
       const product = await this.$prismic.client.query(
         this.$prismic.Predicates.at("my.product.uid", uid),
       );
-      this.product = product.results[0];
+      this.product = product.results[0].data;
     },
     hideProduct() {
-      this.$router.push({ name: "home" });
       this.$emit("hide-product");
     },
     checkPageEnd() {
@@ -61,7 +54,7 @@ export default {
   mounted() {
     setTimeout(() => {
       document.addEventListener("scroll", this.checkPageEnd);
-    }, 1000);
+    }, 500);
   },
   destroyed() {
     document.removeEventListener("scroll", this.checkPageEnd);
@@ -76,7 +69,6 @@ export default {
 <style>
 .product {
   position: relative;
-  z-index: 1;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   align-items: end;

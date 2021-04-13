@@ -22,28 +22,14 @@
 
 <script>
 export default {
-  emits: ["show-product"],
-  data() {
-    return {
-      products: [],
-    }
+  props: {
+    products: Array,
   },
+  emits: ["show-product"],
   methods: {
-    async getContent() {
-      const products = await this.$prismic.client.query(
-        this.$prismic.Predicates.at("document.type", "product"),
-        {
-          orderings: "[document.last_publication_date]",
-        },
-      );
-      this.products = products.results.reverse();
-    },
     showProduct() {
       this.$emit("show-product");
     },
-  },
-  created() {
-    this.getContent();
   },
 };
 </script>
