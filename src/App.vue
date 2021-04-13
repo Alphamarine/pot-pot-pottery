@@ -1,15 +1,13 @@
 <template>
   <div id="app">
-    <the-header></the-header>
-    <the-products
-      :products="products"
-      @show-product="toggleProduct()"
-    ></the-products>
-    <transition name="scroll">
+    <div id="home">
+      <the-header></the-header>
+      <the-products @show-product="showProduct"></the-products>
+    </div>
+    <transition name="scroll" mode="out-in">
       <router-view
-        v-if="$route.name === 'Product'"
-        :productIsShown="productIsShown"
-        @hide-product="toggleProduct()"
+        v-if="currentRoute === 'product'"
+        @hide-product="hideProduct"
       ></router-view>
     </transition>
   </div>
@@ -23,26 +21,58 @@ export default {
   components: { TheHeader, TheProducts },
   data() {
     return {
-      products: [],
+      scrollY: 0,
+      currentRoute: this.$route.name,
       productIsShown: false,
     };
   },
-  methods: {
-    async getContent() {
-      const products = await this.$prismic.client.query(
-        this.$prismic.Predicates.at("document.type", "product"),
-        {
-          orderings: "[document.last_publication_date]",
-        },
-      );
-      this.products = products.results.reverse();
-    },
-    toggleProduct() {
-      this.productIsShown = !this.productIsShown;
+  watch: {
+    $route(to, from) {
+      this.currentRoute = to.name;
     },
   },
-  created() {
-    this.getContent();
+  computed: {
+    fixed() {
+      return {
+        position: "fixed",
+        top: `-${this.scrollY}px`,
+        left: 0,
+        right: 0,
+      };
+    },
+  },
+  methods: {
+    hideProduct() {
+      this.$router.push({ name: "home" });
+      setTimeout(() => {
+        this.productIsShown = false;
+        const home = document.querySelector("#home");
+        home.style.position = "";
+        home.style.top = "";
+        window.scrollTo(0, this.scrollY);
+      }, 500);
+    },
+    showProduct() {
+      this.productIsShown = true;
+      const home = document.querySelector("#home");
+      home.style.position = "fixed";
+      home.style.top = this.fixed.top;
+      // Object.assign(home.style, this.fixed);
+    },
+    updateScroll() {
+      if (this.currentRoute === "home") {
+        this.scrollY = window.scrollY;
+      }
+    },
+  },
+  mounted() {
+    document.addEventListener("scroll", this.updateScroll);
+    if (this.currentRoute === "product") {
+      this.showProduct();
+    }
+  },
+  destroyed() {
+    document.removeEventListener("scroll", this.updateScroll);
   },
 };
 </script>
@@ -52,9 +82,16 @@ export default {
 @import url("./assets/styles/variables.css");
 @import url("./assets/styles/main.css");
 
-.scroll-enter,
+#home {
+  position: relative;
+}
+
+.scroll-enter {
+  transform: translateY(100vh);
+}
+
 .scroll-leave-to {
-  transform: translateY(100px);
+  transform: translateY(-100vh);
 }
 
 .scroll-enter-active,

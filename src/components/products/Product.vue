@@ -1,18 +1,19 @@
 <template>
   <div>
-    <div v-if="typeof product.data === 'undefined'" />
-    <div v-else id="product">
+    <!-- <div v-if="typeof product.data === 'undefined'" class="product" /> -->
+    <div class="product">
       <prismic-rich-text :field="product.data.title" id="product__title" />
       <img
         :src="product.data.image.url"
         :alt="product.data.image.alt"
         id="product__image"
       />
-      <button id="product__close" @click="$router.push({ name: 'home'})">close</button>
+      <button id="product__close" @click="hideProduct">close</button>
       <h4 id="product__price">
         {{ `€ ${$prismic.richTextAsPlain(product.data.price)},00` }}
       </h4>
     </div>
+    <div id="product__scrollable"></div>
   </div>
 </template>
 
@@ -24,7 +25,15 @@ export default {
   emits: ["hide-product"],
   data() {
     return {
-      product: {},
+      product: {
+        data: {
+          title: [],
+          image: {
+            url: "",
+            alt: "",
+          }
+        }
+      },
     };
   },
   methods: {
@@ -35,24 +44,26 @@ export default {
       this.product = product.results[0];
     },
     hideProduct() {
-      // this.$emit("hide-product");
-      console.log("emitted");
+      this.$emit("hide-product");
+    },
+    checkPageEnd() {
+      const pageHeight = document.body.offsetHeight;
+      const scrollPosition = window.innerHeight + window.scrollY;
+      if (scrollPosition >= pageHeight) {
+        this.hideProduct();
+      }
     },
   },
-  // methods: {
-  //   setSelectedProduct(slug) {
-  //     this.selectedProduct = this.products.find((e) => e.slugs[0] === slug);
-  //     console.log("call");
-  //     console.log(this.products);
-  //     console.log(this.selectedProduct);
-  //   },
-  // },
-  // mounted() {
-  //   this.setSelectedProduct(this.productSlug);
-  // },
   created() {
-    this.getContent(this.uid);
-    console.log("ok");
+    // this.getContent(this.uid);
+  },
+  mounted() {
+    setTimeout(() => {
+      document.addEventListener("scroll", this.checkPageEnd);
+    }, 1000);
+  },
+  destroyed() {
+    document.removeEventListener("scroll", this.checkPageEnd);
   },
   beforeRouteUpdate(to, from, next) {
     this.getContent(to.params.uid);
@@ -62,14 +73,15 @@ export default {
 </script>
 
 <style>
-#product {
-  position: fixed;
-  top: 0;
+.product {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   align-items: end;
   padding: var(--gap);
   background-color: var(--color0);
+  height: 100vh;
 }
 
 #product__title {
@@ -89,5 +101,9 @@ export default {
 #product__close {
   align-self: start;
   justify-self: end;
+}
+#product__scrollable {
+  grid-row: 4;
+  height: 100vh;
 }
 </style>
