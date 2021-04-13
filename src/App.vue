@@ -23,7 +23,7 @@ export default {
     return {
       scrollY: 0,
       currentRoute: this.$route.name,
-      productIsShown: false,
+      // productIsShown: false,
     };
   },
   watch: {
@@ -32,20 +32,14 @@ export default {
     },
   },
   computed: {
-    fixed() {
-      return {
-        position: "fixed",
-        top: `-${this.scrollY}px`,
-        left: 0,
-        right: 0,
-      };
+    top() {
+      return `-${this.scrollY}px`;
     },
   },
   methods: {
     hideProduct() {
-      this.$router.push({ name: "home" });
       setTimeout(() => {
-        this.productIsShown = false;
+        // this.productIsShown = false;
         const home = document.querySelector("#home");
         home.style.position = "";
         home.style.top = "";
@@ -53,11 +47,10 @@ export default {
       }, 500);
     },
     showProduct() {
-      this.productIsShown = true;
+      // this.productIsShown = true;
       const home = document.querySelector("#home");
       home.style.position = "fixed";
-      home.style.top = this.fixed.top;
-      // Object.assign(home.style, this.fixed);
+      home.style.top = this.top;
     },
     updateScroll() {
       if (this.currentRoute === "home") {
@@ -83,7 +76,8 @@ export default {
 @import url("./assets/styles/main.css");
 
 #home {
-  position: relative;
+  right: 0;
+  left: 0;
 }
 
 .scroll-enter {

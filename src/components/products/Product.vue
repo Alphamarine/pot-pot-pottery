@@ -31,8 +31,8 @@ export default {
           image: {
             url: "",
             alt: "",
-          }
-        }
+          },
+        },
       },
     };
   },
@@ -44,18 +44,19 @@ export default {
       this.product = product.results[0];
     },
     hideProduct() {
+      this.$router.push({ name: "home" });
       this.$emit("hide-product");
     },
     checkPageEnd() {
       const pageHeight = document.body.offsetHeight;
       const scrollPosition = window.innerHeight + window.scrollY;
-      if (scrollPosition >= pageHeight) {
+      if (Math.round(scrollPosition) >= pageHeight) {
         this.hideProduct();
       }
     },
   },
   created() {
-    // this.getContent(this.uid);
+    this.getContent(this.uid);
   },
   mounted() {
     setTimeout(() => {
