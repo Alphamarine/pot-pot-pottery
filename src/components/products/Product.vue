@@ -20,6 +20,7 @@
 export default {
   props: {
     uid: String,
+    products: Array,
   },
   emits: ["hide-product"],
   data() {
@@ -31,11 +32,10 @@ export default {
     };
   },
   methods: {
-    async getContent(uid) {
-      const product = await this.$prismic.client.query(
-        this.$prismic.Predicates.at("my.product.uid", uid),
-      );
-      this.product = product.results[0].data;
+    getProduct(uid) {
+      console.log(this.products[0]);
+      const product = this.products.find((e) => e.uid === uid);
+      this.product = product.data;
     },
     hideProduct() {
       this.$emit("hide-product");
@@ -49,7 +49,7 @@ export default {
     },
   },
   created() {
-    this.getContent(this.uid);
+    this.getProduct(this.uid);
   },
   mounted() {
     setTimeout(() => {
@@ -60,7 +60,7 @@ export default {
     document.removeEventListener("scroll", this.checkPageEnd);
   },
   beforeRouteUpdate(to, from, next) {
-    this.getContent(to.params.uid);
+    this.getProduct(to.params.uid);
     next();
   },
 };

@@ -10,7 +10,8 @@
     </div>
     <transition name="scroll">
       <router-view
-        v-if="currentRoute === 'product'"
+        v-if="currentRoute === 'product' && products.length"
+        :products="products"
         @hide-product="hideProduct"
       ></router-view>
     </transition>
