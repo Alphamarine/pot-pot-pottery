@@ -2,13 +2,10 @@
   <div id="app">
     <div id="home">
       <the-header :header="home"></the-header>
-      <the-products
-        :products="products"
-        @show-product="showProduct"
-      ></the-products>
+      <the-products :products="products" @lock-home="lockHome"></the-products>
       <the-footer :footer="home"></the-footer>
     </div>
-    <transition :name="productTransition">
+    <transition name="scroll">
       <router-view
         v-if="currentRoute === 'product' && products.length"
         :products="products"
@@ -37,7 +34,6 @@ export default {
       products: [],
       scrollY: 0,
       currentRoute: this.$route.name,
-      productTransition: "scroll",
     };
   },
   computed: {
@@ -54,6 +50,7 @@ export default {
     async getContent() {
       const home = await this.$prismic.client.getSingle("home");
       this.home = home.data;
+
       const products = await this.$prismic.client.query(
         this.$prismic.Predicates.at("document.type", "product"),
         {
@@ -62,30 +59,34 @@ export default {
       );
       this.products = products.results.reverse();
     },
-    restoreHome() {
-      const home = document.querySelector("#home");
-      home.style.position = "relative";
-      home.style.top = 0;
-      window.scrollTo(0, this.scrollY, "smooth");
-    },
-    hideProduct(payload) {
-      const productContainer = document.querySelector("#product__container");
-      this.$router.push({ name: "home" });
-      if (payload === "scrolling") {
-        productContainer.style.display = "none"
-        this.restoreHome();
-      } else {
-        setTimeout(this.restoreHome, 600);
+    updateScroll() {
+      if (this.currentRoute === "home") {
+        setTimeout(() => {
+          this.scrollY = window.scrollY;
+        }, 500);
       }
     },
-    showProduct() {
+    lockHome() {
       const home = document.querySelector("#home");
       home.style.position = "fixed";
       home.style.top = this.top;
+      home.style.pointerEvents = "none";
     },
-    updateScroll() {
-      if (this.currentRoute === "home") {
-        this.scrollY = window.scrollY;
+    unlockHome() {
+      const home = document.querySelector("#home");
+      const productContainer = document.querySelector("#product__container");
+      home.style.position = "relative";
+      home.style.top = 0;
+      home.style.pointerEvents = "auto";
+      productContainer.style.display = "none";
+      window.scrollTo(0, this.scrollY);
+    },
+    hideProduct(payload) {
+      this.$router.push({ name: "home" });
+      if (payload === "scrolling") {
+        this.unlockHome();
+      } else {
+        setTimeout(this.unlockHome, 500);
       }
     },
   },
@@ -95,7 +96,7 @@ export default {
   mounted() {
     document.addEventListener("scroll", this.updateScroll);
     if (this.currentRoute === "product") {
-      this.showProduct();
+      this.lockHome();
     }
   },
   destroyed() {

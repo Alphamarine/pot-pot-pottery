@@ -9,12 +9,14 @@
       <div class="products__item__text">
         <router-link :to="product.uid">
           <prismic-rich-text
-            class="products__item__text--title"
+            class="products__item__text__title"
             :field="product.data.title"
-            @click="showProduct"
+            @click="lockHome"
           />
         </router-link>
-        <h4>{{ `€ ${$prismic.richTextAsPlain(product.data.price)},00` }}</h4>
+        <h4 class="products__item__text__price">
+          {{ `€ ${$prismic.richTextAsPlain(product.data.price)},00` }}
+        </h4>
       </div>
     </div>
   </div>
@@ -25,10 +27,10 @@ export default {
   props: {
     products: Array,
   },
-  emits: ["show-product"],
+  emits: ["lock-home"],
   methods: {
-    showProduct() {
-      this.$emit("show-product");
+    lockHome() {
+      this.$emit("lock-home");
     },
   },
 };
@@ -60,20 +62,21 @@ export default {
   padding: var(--gap);
 }
 
-.products__item__text :is(.products__item__text--title, h4) {
+.products__item__text__title,
+.products__item__text__price {
   background-color: var(--color0);
   border-radius: 50rem;
   padding: 10rem 20rem 6rem 20rem;
 }
 
-.products__item__text--title {
+.products__item__text__title {
   font-size: 30rem;
   cursor: pointer;
   transition: transform 0.3s ease;
   transform-origin: bottom left;
 }
 
-.products__item__text--title:hover {
+.products__item__text__title:hover {
   transform: scale(1.1);
 }
 

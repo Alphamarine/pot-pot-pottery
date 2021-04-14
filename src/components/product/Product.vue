@@ -18,7 +18,7 @@ export default {
     uid: String,
     products: Array,
   },
-  emits: ["close-product", "close-product-scrolling"],
+  emits: ["close-product"],
   data() {
     return {
       product: {
@@ -50,7 +50,7 @@ export default {
   mounted() {
     setTimeout(() => {
       document.addEventListener("scroll", this.checkPageEnd);
-    }, 500);
+    }, 600);
   },
   destroyed() {
     document.removeEventListener("scroll", this.checkPageEnd);

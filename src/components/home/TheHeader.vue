@@ -3,10 +3,7 @@
     <prismic-image id="header__image" :field="header.image" />
     <div id="header__text">
       <prismic-rich-text id="header__text__title" :field="header.title" />
-      <prismic-rich-text
-        id="header__text__description"
-        :field="header.description"
-      />
+      <prismic-rich-text :field="header.description" />
     </div>
   </header>
 </template>
@@ -40,5 +37,4 @@ export default {
   font-size: 50rem;
   align-self: end;
 }
-
 </style>
