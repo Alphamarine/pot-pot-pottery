@@ -48,9 +48,7 @@ export default {
     this.getProduct(this.uid);
   },
   mounted() {
-    setTimeout(() => {
       document.addEventListener("scroll", this.checkPageEnd);
-    }, 600);
   },
   destroyed() {
     document.removeEventListener("scroll", this.checkPageEnd);
