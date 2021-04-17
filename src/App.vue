@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <div id="home">
+  <div class="app">
+    <div class="home">
       <the-header :header="home"></the-header>
       <the-products :products="products" @lock-home="lockHome"></the-products>
       <the-footer :footer="home"></the-footer>
@@ -67,14 +67,14 @@ export default {
       }
     },
     lockHome() {
-      const home = document.querySelector("#home");
+      const home = document.querySelector(".home");
       home.style.position = "fixed";
       home.style.top = this.top;
       home.style.pointerEvents = "none";
     },
     unlockHome() {
-      const home = document.querySelector("#home");
-      const productContainer = document.querySelector("#product__container");
+      const home = document.querySelector(".home");
+      const productContainer = document.querySelector(".product__container");
       home.style.position = "relative";
       home.style.top = 0;
       home.style.pointerEvents = "auto";
@@ -109,7 +109,7 @@ export default {
 @import url("./assets/styles/reset.scss");
 @import url("./assets/styles/main.scss");
 
-#home {
+.home {
   position: relative;
   right: 0;
   left: 0;

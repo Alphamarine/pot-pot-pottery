@@ -1,5 +1,5 @@
 <template>
-  <div id="products">
+  <div class="products">
     <div
       v-for="product in products"
       :key="product.data.id"
@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss">
-#products {
+.products {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: $gap;
@@ -81,7 +81,7 @@ export default {
 }
 
 @media screen and (max-width: 75em) {
-  #products {
+  .products {
     grid-template-columns: 1fr;
   }
 }

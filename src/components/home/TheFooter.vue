@@ -1,7 +1,7 @@
 <template>
-  <footer id="footer">
+  <footer class="footer">
     <prismic-rich-text :field="footer.title" />
-    <div id="footer__links">
+    <div class="footer__links">
       <prismic-link :field="footer.instagram">Instagram</prismic-link>
       <prismic-link :field="footer.facebook">Facebook</prismic-link>
     </div>
@@ -17,14 +17,14 @@ export default {
 </script>
 
 <style lang="scss">
-#footer {
+.footer {
   display: flex;
   justify-content: space-between;
   padding: $gap;
   margin-top: $gap;
 }
 
-#footer__links {
+.footer__links {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   column-gap: $gap;
