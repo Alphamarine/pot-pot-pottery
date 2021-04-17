@@ -9,12 +9,12 @@
       <div class="products__item__text">
         <router-link :to="product.uid">
           <prismic-rich-text
-            class="products__item__text__title"
+            class="products__item__text__title navigation-background--light"
             :field="product.data.title"
             @click="lockHome"
           />
         </router-link>
-        <h4 class="products__item__text__price">
+        <h4 class="navigation-background--light">
           {{ `€ ${$prismic.richTextAsPlain(product.data.price)},00` }}
         </h4>
       </div>
@@ -55,18 +55,8 @@ export default {
 }
 
 .products__item__text {
+  @extend %navigation-layout;
   position: absolute;
-  display: grid;
-  justify-items: start;
-  row-gap: $gap / 2;
-  padding: $gap;
-}
-
-.products__item__text__title,
-.products__item__text__price {
-  background-color: $color0;
-  border-radius: 50rem;
-  padding: 10rem 20rem 6rem 20rem;
 }
 
 .products__item__text__title {

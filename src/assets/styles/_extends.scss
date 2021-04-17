@@ -1,0 +1,11 @@
+%navigation-background {
+  border-radius: 50rem;
+  padding: 10rem 20rem 6rem 20rem;
+}
+
+%navigation-layout {
+  display: grid;
+  justify-items: start;
+  row-gap: $gap / 2;
+  margin: $gap;
+}
