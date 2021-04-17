@@ -36,12 +36,12 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #products {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--gap);
-  padding: var(--gap);
+  gap: $gap;
+  padding: $gap;
 }
 
 .products__item {
@@ -58,13 +58,13 @@ export default {
   position: absolute;
   display: grid;
   justify-items: start;
-  row-gap: calc(var(--gap) / 2);
-  padding: var(--gap);
+  row-gap: $gap / 2;
+  padding: $gap;
 }
 
 .products__item__text__title,
 .products__item__text__price {
-  background-color: var(--color0);
+  background-color: $color0;
   border-radius: 50rem;
   padding: 10rem 20rem 6rem 20rem;
 }

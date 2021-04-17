@@ -60,14 +60,14 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #product {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   align-items: end;
-  padding: var(--gap);
-  background-color: var(--color0);
+  padding: $gap;
+  background-color: $color0;
   height: 100vh;
 }
 

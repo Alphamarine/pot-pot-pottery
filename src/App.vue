@@ -105,10 +105,9 @@ export default {
 };
 </script>
 
-<style>
-@import url("./assets/styles/reset.css");
-@import url("./assets/styles/variables.css");
-@import url("./assets/styles/main.css");
+<style lang="scss">
+@import url("./assets/styles/reset.scss");
+@import url("./assets/styles/main.scss");
 
 #home {
   position: relative;

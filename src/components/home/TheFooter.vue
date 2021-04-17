@@ -16,17 +16,17 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #footer {
   display: flex;
   justify-content: space-between;
-  padding: var(--gap);
-  margin-top: var(--gap);
+  padding: $gap;
+  margin-top: $gap;
 }
 
 #footer__links {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  column-gap: var(--gap);
+  column-gap: $gap;
 }
 </style>
