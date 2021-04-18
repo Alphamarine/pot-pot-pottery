@@ -12,13 +12,11 @@ const routes = [
     path: "/",
     name: "home",
     component: Home,
-    meta: { navigation: true },
   },
   {
     path: "/products",
     name: "products",
     component: Products,
-    meta: { navigation: true },
   },
   {
     path: "/products/:uid",
@@ -42,26 +40,24 @@ const routes = [
       product: true,
     },
   },
-  // {
-  //   path: "*",
-  //   name: "catch",
-  //   redirect: { name: "home" },
-  // },
+  {
+    path: "*",
+    name: "catch",
+    redirect: { name: "home" },
+  },
 ];
 
-// function scrollBehavior(to, from, savedPosition) {
-//   if (savedPosition && from.name !== "product") {
-//     return savedPosition;
-//   } else {
-//     return { x: 0, y: 0 };
-//   }
-// }
+function scrollBehavior(to, from, savedPosition) {
+  if (from.name !== "product") {
+    return { x: 0, y: 0 };
+  }
+}
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-  // scrollBehavior,
+  scrollBehavior,
 });
 
 export default router;
