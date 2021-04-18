@@ -10,8 +10,26 @@
 
 <script>
 export default {
-  props: {
-    footer: Object,
+  // props: {
+  //   footer: Object,
+  // },
+  data() {
+    return {
+      footer: {
+        title: [],
+        instagram: {},
+        facebook: {},
+      },
+    };
+  },
+  methods: {
+    async getContent() {
+      const home = await this.$prismic.client.getSingle("home");
+      this.footer = home.data;
+    },
+  },
+  created() {
+    this.getContent();
   },
 };
 </script>

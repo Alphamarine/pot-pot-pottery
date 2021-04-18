@@ -1,45 +1,48 @@
 <template>
   <div>
-    <the-navigation></the-navigation>
-    <router-view :products="products"></router-view>
-    <the-footer :footer="home"></the-footer>
+    <div class="main">
+      <the-navigation></the-navigation>
+      <router-view :products="products" @lock-main="lockMain"></router-view>
+      <the-footer></the-footer>
+    </div>
     <transition name="scroll">
       <router-view
-        v-if="currentRoute === 'product' && products.length"
         :products="products"
+        @hide-product="hideProduct"
         name="product"
+        v-if="products.length"
       ></router-view>
     </transition>
   </div>
 </template>
 
 <script>
-import TheNavigation from "./components/navigation/TheNavigation";
-import TheHeader from "./components/home/TheHeader";
-import TheProducts from "./components/home/TheProducts";
-import TheFooter from "./components/home/TheFooter";
+import TheNavigation from "./components/TheNavigation";
+import TheFooter from "./components/TheFooter";
 
 export default {
-  components: { TheNavigation, TheHeader, TheProducts, TheFooter },
+  components: { TheNavigation, TheFooter },
   data() {
     return {
-      home: {
-        title: [],
-        description: [],
-        image: {},
-        instagram: {},
-        facebook: {},
-      },
       products: [],
-      
+      scrollY: 0,
       currentRoute: this.$route.name,
+      previousRoute: "",
     };
+  },
+  watch: {
+    $route(to, from) {
+      this.currentRoute = to.name;
+      this.previousRoute = from.name;
+    },
+  },
+  computed: {
+    top() {
+      return `-${this.scrollY}px`;
+    },
   },
   methods: {
     async getContent() {
-      const home = await this.$prismic.client.getSingle("home");
-      this.home = home.data;
-
       const products = await this.$prismic.client.query(
         this.$prismic.Predicates.at("document.type", "product"),
         {
@@ -48,18 +51,65 @@ export default {
       );
       this.products = products.results.reverse();
     },
-    
+    updateScroll() {
+      if (this.currentRoute !== "product") {
+        setTimeout(() => {
+          this.scrollY = window.scrollY;
+        }, 500);
+      }
+    },
+    lockMain() {
+      const main = document.querySelector(".main");
+      main.style.position = "fixed";
+      main.style.top = this.top;
+      main.style.pointerEvents = "none";
+    },
+    unlockMain() {
+      const main = document.querySelector(".main");
+      const productContainer = document.querySelector(".product__container");
+      productContainer.style.display = "none";
+      main.style.position = "relative";
+      main.style.top = 0;
+      main.style.pointerEvents = "auto";
+      window.scrollTo(0, this.scrollY);
+    },
+    hideProduct(payload) {
+      if (this.currentRoute === "product" && this.previousRoute === "") {
+        this.$router.push({ name: "products" });
+      } else {
+        this.$router.go(-1);
+      }
+      if (payload === "scrolling") {
+        this.unlockMain();
+      } else {
+        setTimeout(this.unlockMain, 500);
+      }
+    },
   },
   created() {
     this.getContent();
   },
-  
+  mounted() {
+    document.addEventListener("scroll", this.updateScroll);
+    if (this.currentRoute === "product") {
+      this.lockMain();
+    }
+  },
+  destroyed() {
+    document.removeEventListener("scroll", this.updateScroll);
+  },
 };
 </script>
 
 <style lang="scss">
 @import "./assets/styles/reset.scss";
 @import "./assets/styles/main.scss";
+
+.main {
+  position: relative;
+  left: 0;
+  right: 0;
+}
 
 .scroll-enter {
   transform: translateY(100vh);

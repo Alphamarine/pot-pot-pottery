@@ -1,8 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Product from "../components/product/Product.vue";
-import Home from "../views/Home.vue";
-import Products from "../views/Products.vue";
+import Main from "../views/Main.vue";
+import Product from "../views/Product.vue";
 
 Vue.use(VueRouter);
 
@@ -10,32 +9,42 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Home,
+    component: Main,
   },
   {
     path: "/products",
     name: "products",
-    component: Products,
-    children: [
-      {
-        path: ":uid",
-        name: "product",
-        component: Product,
-        props: true,
-      },
-    ],
+    component: Main,
   },
   {
-    path: "*",
-    name: "catch",
-    redirect: { name: "home" },
+    path: "/products/:uid",
+    name: "product",
+    components: {
+      default: Main,
+      product: Product,
+    },
+    props: {
+      product: true,
+    },
   },
+  // {
+  //   path: "*",
+  //   name: "catch",
+  //   redirect: { name: "home" },
+  // },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+  // scrollBehavior(to, from, savedPosition) {
+  //   if (savedPosition) {
+  //     return savedPosition;
+  //   } else {
+  //     return { x: 0, y: 0 };
+  //   }
+  // },
 });
 
 export default router;
