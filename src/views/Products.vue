@@ -12,7 +12,6 @@
             <prismic-rich-text
               class="products__item__text__title navigation-background--light"
               :field="product.data.title"
-              @click="lockMain"
             />
           </router-link>
           <h4 class="navigation-background--light">
@@ -25,16 +24,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
-  props: {
-    products: Array,
+  computed: {
+    ...mapState(["products"]),
   },
-  emits: ["lock-main"],
-  methods: {
-    lockMain() {
-      this.$emit("lock-main");
-    },
-  }
 };
 </script>
 

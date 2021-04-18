@@ -1,9 +1,8 @@
 <template>
   <nav class="navigation__items">
-    <!-- {{ navigationRoutes }} -->
     <router-link
-      v-for="route in routes"
-      :key="route.name"
+      v-for="route in navigationRoutes"
+      :key="route.path"
       class="navigation-background--dark"
       :to="route.path"
       >{{ route.name }}</router-link
@@ -19,9 +18,9 @@ export default {
     };
   },
   computed: {
-    // navigationRoutes() {
-    //   return this.routes.splice(0, 2);
-    // },
+    navigationRoutes() {
+      return this.routes.splice(0, 2);
+    },
   },
 };
 </script>

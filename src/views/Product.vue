@@ -13,12 +13,12 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
   props: {
     uid: String,
-    products: Array,
   },
-  emits: ["lock-main", "hide-product"],
   data() {
     return {
       product: {
@@ -26,36 +26,52 @@ export default {
         price: [],
         image: {},
       },
+      pageEnd: false,
     };
   },
+  computed: {
+    ...mapState(["products"]),
+  },
   methods: {
+    ...mapActions(["lockView", "unlockView"]),
     getProduct(uid) {
       const product = this.products.find((e) => e.uid === uid);
       this.product = product.data;
     },
     hideProduct() {
-      this.$emit("hide-product");
+      this.$router.back();
     },
     checkPageEnd() {
       const pageHeight = document.body.offsetHeight;
       const scrollPosition = window.innerHeight + window.scrollY;
       if (Math.round(scrollPosition) >= pageHeight) {
-        this.$emit("hide-product", "scrolling");
+        this.pageEnd = true;
+        this.hideProduct();
       }
     },
   },
   created() {
     this.getProduct(this.uid);
+    this.pageEnd = false;
   },
   mounted() {
     document.addEventListener("scroll", this.checkPageEnd);
-    this.$emit("lock-main");
+    this.lockView({ selector: ".main" });
   },
   destroyed() {
     document.removeEventListener("scroll", this.checkPageEnd);
   },
-  beforeRouteUpdate(to, from, next) {
-    this.getProduct(to.params.uid);
+  beforeRouteLeave(to, from, next) {
+    if (this.pageEnd) {
+      this.unlockView({ selector1: ".main", selector2: ".product__container" });
+    } else {
+      setTimeout(() => {
+        this.unlockView({
+          selector1: ".main",
+          selector2: ".product__container",
+        });
+      }, 500);
+    }
     next();
   },
 };

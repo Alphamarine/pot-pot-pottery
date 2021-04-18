@@ -10,9 +10,6 @@
 
 <script>
 export default {
-  // props: {
-  //   header: Object,
-  // },
   data() {
     return {
       header: {
