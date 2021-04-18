@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    home: {},
     products: [],
     scrollY: 0,
     initialNavigation: true,
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    setProducts(state, products) {
+    setData(state, { home, products }) {
+      state.home = home;
       state.products = products;
     },
     updateScroll(state) {
@@ -42,8 +44,8 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    setProducts(context, products) {
-      context.commit("setProducts", products);
+    setData(context, { home, products }) {
+      context.commit("setData", { home, products });
     },
     updateScroll(context) {
       if (router.currentRoute.name !== "product") {
