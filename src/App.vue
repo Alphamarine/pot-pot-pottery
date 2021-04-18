@@ -8,6 +8,7 @@
     <transition name="scroll">
       <router-view
         :products="products"
+        @lock-main="lockMain"
         @hide-product="hideProduct"
         name="product"
         v-if="products.length"
@@ -91,9 +92,9 @@ export default {
   },
   mounted() {
     document.addEventListener("scroll", this.updateScroll);
-    if (this.currentRoute === "product") {
-      this.lockMain();
-    }
+    // if (this.currentRoute === "product") {
+    //   this.lockMain();
+    // }
   },
   destroyed() {
     document.removeEventListener("scroll", this.updateScroll);

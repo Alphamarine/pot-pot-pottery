@@ -18,7 +18,7 @@ export default {
     uid: String,
     products: Array,
   },
-  emits: ["hide-product"],
+  emits: ["lock-main", "hide-product"],
   data() {
     return {
       product: {
@@ -49,6 +49,7 @@ export default {
   },
   mounted() {
     document.addEventListener("scroll", this.checkPageEnd);
+    this.$emit("lock-main");
   },
   destroyed() {
     document.removeEventListener("scroll", this.checkPageEnd);
