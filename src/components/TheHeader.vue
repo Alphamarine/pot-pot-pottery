@@ -34,22 +34,22 @@ export default {
 <style lang="scss">
 .header {
   display: grid;
-}
 
-.header__image {
-  object-fit: cover;
-  height: 75vh;
-}
+  &__image {
+    object-fit: cover;
+    height: 75vh;
+  }
 
-.header__text {
-  display: grid;
-  row-gap: 10rem;
-  height: 25vh;
-  text-align: center;
-}
+  &__text {
+    display: grid;
+    row-gap: 10rem;
+    height: 25vh;
+    text-align: center;
 
-.header__text__title {
-  font-size: 50rem;
-  align-self: end;
+    &__title {
+      font-size: 50rem;
+      align-self: end;
+    }
+  }
 }
 </style>

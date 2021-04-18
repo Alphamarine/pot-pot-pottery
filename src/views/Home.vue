@@ -13,5 +13,3 @@ export default {
   components: { TheHeader, Products },
 };
 </script>
-
-<style></style>

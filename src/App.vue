@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="main">
-      <the-navigation></the-navigation>
+      <the-navigation v-show="$route.name !== 'product'"></the-navigation>
       <router-view></router-view>
       <the-footer></the-footer>
     </div>
@@ -22,7 +22,7 @@ export default {
     ...mapState(["products"]),
   },
   methods: {
-    ...mapActions(["setProducts", "updateScroll"]),
+    ...mapActions(["setProducts", "updateScroll", "navigate"]),
     async getContent() {
       const products = await this.$prismic.client.query(
         this.$prismic.Predicates.at("document.type", "product"),
@@ -31,6 +31,11 @@ export default {
         },
       );
       this.setProducts(products.results.reverse());
+    },
+  },
+  watch: {
+    $route() {
+      this.navigate();
     },
   },
   created() {

@@ -1,9 +1,9 @@
 <template>
-  <nav class="navigation__items">
+  <nav class="navigation">
     <router-link
       v-for="route in navigationRoutes"
       :key="route.path"
-      class="navigation-background--dark"
+      class="navigation__item text-background--dark"
       :to="route.path"
       >{{ route.name }}</router-link
     >
@@ -26,9 +26,14 @@ export default {
 </script>
 
 <style lang="scss">
-.navigation__items {
-  @extend %navigation-layout;
+.navigation {
+  @extend %list-layout;
   position: fixed;
   z-index: 1;
+
+  &__item {
+    @extend %button-transition;
+    transform-origin: top left;
+  }
 }
 </style>

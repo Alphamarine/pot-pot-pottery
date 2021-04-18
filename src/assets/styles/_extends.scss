@@ -1,11 +1,20 @@
-%navigation-background {
+%text-background {
   border-radius: 50rem;
   padding: 10rem 20rem 6rem 20rem;
 }
 
-%navigation-layout {
+%list-layout {
   display: grid;
   justify-items: start;
   row-gap: $gap / 2;
   margin: $gap;
+}
+
+%button-transition {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }

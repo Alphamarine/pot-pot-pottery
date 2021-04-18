@@ -3,7 +3,9 @@
     <div class="product">
       <prismic-rich-text :field="product.title" class="product__title" />
       <prismic-image class="product__image" :field="product.image" />
-      <button class="product__close" @click="hideProduct">close</button>
+      <button class="product__close text-background--dark" @click="hideProduct">
+        close
+      </button>
       <h4 class="product__price">
         {{ `€ ${$prismic.richTextAsPlain(product.price)},00` }}
       </h4>
@@ -30,7 +32,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["products"]),
+    ...mapState(["products", "initialNavigation"]),
   },
   methods: {
     ...mapActions(["lockView", "unlockView"]),
@@ -39,12 +41,16 @@ export default {
       this.product = product.data;
     },
     hideProduct() {
-      this.$router.back();
+      if (this.initialNavigation) {
+        this.$router.push({ name: "products" });
+      } else {
+        this.$router.back();
+      }
     },
     checkPageEnd() {
       const pageHeight = document.body.offsetHeight;
       const scrollPosition = window.innerHeight + window.scrollY;
-      if (Math.round(scrollPosition) >= pageHeight) {
+      if (Math.round(scrollPosition + 1) >= pageHeight) {
         this.pageEnd = true;
         this.hideProduct();
       }
@@ -52,7 +58,6 @@ export default {
   },
   created() {
     this.getProduct(this.uid);
-    this.pageEnd = false;
   },
   mounted() {
     document.addEventListener("scroll", this.checkPageEnd);
@@ -86,32 +91,35 @@ export default {
   padding: $gap;
   background-color: $color0;
   height: 100vh;
-}
 
-.product__title {
-  z-index: 1;
-  grid-row: 1 / span 2;
-  grid-column: 1 / span 2;
-  font-size: 30rem;
-}
+  &__title {
+    z-index: 1;
+    grid-row: 1 / span 2;
+    grid-column: 1 / span 2;
+    font-size: $font-size-1;
+  }
 
-.product__image {
-  grid-row: 1 / span 2;
-  grid-column: 2;
-  align-self: center;
-}
+  &__image {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    align-self: center;
+  }
 
-.product__price {
-  justify-self: end;
-  font-size: 30rem;
-}
+  &__price {
+    justify-self: end;
+    font-size: 30rem;
+  }
 
-.product__close {
-  align-self: start;
-  justify-self: end;
-}
-.product__scrollable {
-  grid-row: 4;
-  height: 100vh;
+  &__close {
+    @extend %button-transition;
+    align-self: start;
+    justify-self: end;
+    transform-origin: top right;
+  }
+
+  &__scrollable {
+    grid-row: 4;
+    height: 100vh;
+  }
 }
 </style>

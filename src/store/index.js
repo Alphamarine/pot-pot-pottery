@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import router from "../router/index";
+import router from "../router/index.js";
 
 Vue.use(Vuex);
 
@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     products: [],
     scrollY: 0,
+    initialNavigation: true,
   },
   getters: {
     top(state) {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     },
     updateScroll(state) {
       state.scrollY = window.scrollY;
+    },
+    navigate(state) {
+      state.initialNavigation = false;
     },
     lockView(state, { selector, getters }) {
       const view = document.querySelector(selector);
@@ -43,10 +47,11 @@ export default new Vuex.Store({
     },
     updateScroll(context) {
       if (router.currentRoute.name !== "product") {
-        setTimeout(() => {
-          context.commit("updateScroll");
-        }, 500);
+        context.commit("updateScroll");
       }
+    },
+    navigate(context) {
+      context.commit("navigate");
     },
     lockView({ commit, getters }, { selector }) {
       commit("lockView", { selector, getters });
@@ -55,5 +60,4 @@ export default new Vuex.Store({
       context.commit("unlockView", { selector1, selector2 });
     },
   },
-  modules: {},
 });

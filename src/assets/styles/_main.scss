@@ -8,7 +8,7 @@
   font-size: 6.25%;
 }
 
-@media screen and (max-width: 50em) {
+@media (max-width: 50em) {
   :root {
     font-size: 5%;
   }
@@ -36,13 +36,13 @@ button {
   cursor: pointer;
 }
 
-.navigation-background--light {
-  @extend %navigation-background;
+.text-background--light {
+  @extend %text-background;
   background: $color0;
 }
 
-.navigation-background--dark {
-  @extend %navigation-background;
+.text-background--dark {
+  @extend %text-background;
   background: $color1;
   color: $color0;
 }
